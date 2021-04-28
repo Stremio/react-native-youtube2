@@ -1,10 +1,10 @@
-package com.stellarscript.rctyoutubevideo;
+package com.stremio.rctyoutubevideo;
 
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.stellarscript.youtubevideo.YouTubeVideoView;
+import com.stremio.youtubevideo.YouTubeVideoView;
 
 final class RCTYouTubeVideoView extends FrameLayout {
 

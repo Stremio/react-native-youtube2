@@ -1,4 +1,4 @@
-package com.stellarscript.rctyoutubevideo;
+package com.stremio.rctyoutubevideo;
 
 final class RCTYoutubeVideoProps {
 

@@ -1,23 +1,18 @@
 apply plugin: 'com.android.library'
 
-def _compileSdkVersion = project.hasProperty("compileSdkVersion") ? project.compileSdkVersion.toInteger() : 24;
-def _buildToolsVersion = project.hasProperty("buildToolsVersion") ? project.buildToolsVersion : "26.0.2";
-def _minSdkVersion = project.hasProperty("minSdkVersion") ? project.minSdkVersion.toInteger() : 16;
-def _targetSdkVersion = project.hasProperty("targetSdkVersion") ? project.targetSdkVersion.toInteger() : 22;
-
 android {
-    compileSdkVersion _compileSdkVersion
-    buildToolsVersion _buildToolsVersion
+    compileSdkVersion ((rootProject?.ext?.properties?.compileSdkVersion) ?: 28)
+    buildToolsVersion ((rootProject?.ext?.properties?.buildToolsVersion) ?: "28.0.3")
 
     defaultConfig {
-        minSdkVersion _minSdkVersion
-        targetSdkVersion _targetSdkVersion
-        versionCode 3
-        versionName "2.0.1"
+        minSdkVersion ((rootProject?.ext?.properties?.minSdkVersion) ?: 21)
+        targetSdkVersion ((rootProject?.ext?.properties?.targetSdkVersion) ?: 28)
+        versionCode 4
+        versionName "3.0.0"
     }
 }
 
 dependencies {
-    compile "com.github.NikolaBorislavovHristov:android-youtube-video-view:2.0.1-rc1"
-    compile "com.facebook.react:react-native:+" // from node_modules
+    implementation "com.github.stremio:android-youtube-video-view:3.0.0"
+    implementation "com.facebook.react:react-native:+" // from node_modules
 }

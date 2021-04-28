@@ -1,4 +1,4 @@
-package com.stellarscript.rctyoutubevideo;
+package com.stremio.rctyoutubevideo;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

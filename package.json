@@ -1,11 +1,16 @@
 {
     "name": "react-native-youtube2",
-    "version": "2.0.2",
+    "version": "3.0.0",
+    "description": "YouTube video component for react-native",
     "main": "index.js",
-    "author": "Nikola Hristov",
+    "author": {
+        "name": "Smart Code Ltd.",
+        "email": "office@stremio.com",
+        "url": "https://stremio.com"
+    },
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/NikolaBorislavovHristov/react-native-youtube2.git"
+        "url": "https://github.com/stremio/react-native-youtube2.git"
     }
 }

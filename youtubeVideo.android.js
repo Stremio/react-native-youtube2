@@ -1,13 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View, UIManager, requireNativeComponent, findNodeHandle } from 'react-native';
-
-const RCTYouTubeVideoViewConstants = UIManager.RCTYouTubeVideoView.Constants;
 
 class YouTubeVideo extends Component {
     constructor(props) {
         super(props);
-
-        this._assignRoot = this._assignRoot.bind(this);
 
         this.callbacks = {
             [RCTYouTubeVideoViewConstants.ON_BUFFERING]: this._invokeEventCallback.bind(this, 'onBuffering'),
@@ -23,8 +20,49 @@ class YouTubeVideo extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps.sourceUrl !== this.props.sourceUrl ||
-            nextProps.keyControlEnabled !== this.props.keyControlEnabled ||
             nextProps.style !== this.props.style;
+    }
+
+    _assignRoot = (root) => {
+        this._root = root;
+    }
+
+    _getViewHandle = () => {
+        return findNodeHandle(this._root);
+    }
+
+    _invokeEventCallback = (eventName, event) => {
+        if (typeof this.props[eventName] === 'function') {
+            this.props[eventName](event.nativeEvent);
+        }
+    }
+
+    seek = (time) => {
+        if (typeof time !== 'number' || isNaN(time) || time < 0) {
+            time = 0;
+        }
+
+        UIManager.dispatchViewManagerCommand(
+            this._getViewHandle(),
+            UIManager.RCTYouTubeVideoView.Commands.seek,
+            [time]
+        );
+    }
+
+    play = () => {
+        UIManager.dispatchViewManagerCommand(
+            this._getViewHandle(),
+            UIManager.RCTYouTubeVideoView.Commands.play,
+            null
+        );
+    }
+
+    pause = () => {
+        UIManager.dispatchViewManagerCommand(
+            this._getViewHandle(),
+            UIManager.RCTYouTubeVideoView.Commands.pause,
+            null
+        );
     }
 
     render() {
@@ -38,63 +76,18 @@ class YouTubeVideo extends Component {
             <RCTYouTubeVideoView
                 ref={this._assignRoot}
                 style={this.props.style}
-                keyControlEnabled={this.props.keyControlEnabled}
                 media={media}
                 {...this.callbacks}
             />
         );
     }
-
-    _assignRoot(root) {
-        this._root = root;
-    }
-
-    _getViewHandle() {
-        return findNodeHandle(this._root);
-    }
-
-    _invokeEventCallback(eventName, event) {
-        if (typeof this.props[eventName] === 'function') {
-            this.props[eventName](event.nativeEvent);
-        }
-    }
-
-    seek(time) {
-        if (typeof time !== 'number' || isNaN(time) || time < 0) {
-            time = 0;
-        }
-
-        UIManager.dispatchViewManagerCommand(
-            this._getViewHandle(),
-            UIManager.RCTYouTubeVideoView.Commands.seek,
-            [time]
-        );
-    }
-
-    play() {
-        UIManager.dispatchViewManagerCommand(
-            this._getViewHandle(),
-            UIManager.RCTYouTubeVideoView.Commands.play,
-            null
-        );
-    }
-
-    pause() {
-        UIManager.dispatchViewManagerCommand(
-            this._getViewHandle(),
-            UIManager.RCTYouTubeVideoView.Commands.pause,
-            null
-        );
-    }
-
 }
 
 YouTubeVideo.propTypes = {
-    ...View.propTypes,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     sourceUrl: PropTypes.string.isRequired,
     autoplay: PropTypes.bool.isRequired,
     startTime: PropTypes.number.isRequired,
-    keyControlEnabled: PropTypes.bool.isRequired,
     onBuffering: PropTypes.func,
     onPlaying: PropTypes.func,
     onPaused: PropTypes.func,
@@ -107,16 +100,16 @@ YouTubeVideo.propTypes = {
 
 YouTubeVideo.defaultProps = {
     autoplay: true,
-    startTime: 0,
-    keyControlEnabled: false
+    startTime: 0
 };
+
+const RCTYouTubeVideoViewConstants = UIManager.RCTYouTubeVideoView.Constants;
 
 const RCTYouTubeVideoViewInterface = {
     name: 'YouTubeVideo',
     propTypes: {
         ...View.propTypes,
         media: PropTypes.object.isRequired,
-        keyControlEnabled: PropTypes.bool.isRequired,
         [RCTYouTubeVideoViewConstants.ON_BUFFERING]: PropTypes.func,
         [RCTYouTubeVideoViewConstants.ON_PLAYING]: PropTypes.func,
         [RCTYouTubeVideoViewConstants.ON_PAUSED]: PropTypes.func,
@@ -130,8 +123,7 @@ const RCTYouTubeVideoViewInterface = {
 
 const RCTYouTubeVideoView = requireNativeComponent('RCTYouTubeVideoView', RCTYouTubeVideoViewInterface, {
     nativeOnly: {
-        media: true,
-        keyControlEnabled: true
+        media: true
     }
 });
 
